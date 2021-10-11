@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>ProChat</title>
+	<meta charset="utf-8">
+
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+    color: black;
+			font-family: comic sans ms;
+			background: linear-gradient(to right, rgb(255, 0, 0), rgb(255, 255, 0), rgb(0, 255, 0), rgb(0, 255, 255), rgb(0, 0, 255), rgb(255, 0, 255));
+		}
+
+		::selection {
+			color: red;
+			background: yellow;
+		}
+	</style>
+
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyDOQv34huHQZ_6dGrRPwkhhgMIjihrXGBc",
+			authDomain: "screen-shot-sharer-2.firebaseapp.com",
+			projectId: "screen-shot-sharer-2",
+			storageBucket: "screen-shot-sharer-2.appspot.com",
+			messagingSenderId: "469362549570",
+			appId: "1:469362549570:web:85f32dd12ba0a4ac6f1edb",
+			measurementId: "G-NDJN7R9TRK"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+	</script>
+	<script src="p5.js"></script>
+	<script src="p5.play.js"></script>
+	<script src="loading.js"></script>
+	<script src="redirector_app.js"></script>
+</head>

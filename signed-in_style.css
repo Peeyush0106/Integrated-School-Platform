@@ -1,0 +1,186 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-family: comic sans ms;
+    background: linear-gradient(to right, rgb(255, 0, 0), rgb(255, 255, 0), rgb(0, 255, 0), rgb(0, 255, 255), rgb(0, 0, 255), rgb(255, 0, 255));
+}
+
+#imgFileUpload {
+    transition: .3s;
+}
+
+#imgFileUpload:hover {
+    transform: scale(1.2);
+}
+
+::selection {
+    color: red;
+    background: yellow;
+}
+
+canvas {
+    display: block;
+    border: 0px;
+}
+
+.button {
+    width: 300px;
+    height: 100px;
+    color: white;
+    font-size: 40px;
+    border: none
+}
+
+.info {
+    color: rgb(255, 255, 0);
+    background-color: black;
+    font-size: x-large;
+}
+
+#drop-file-txt {
+    visibility: hidden;
+}
+
+.attach {
+    position: fixed;
+    top: 80px;
+    margin-left: 30%;
+}
+
+#open-chat {
+    position: fixed;
+    top: 80px;
+    margin-left: 50%;
+}
+
+button:hover, input:hover, img:hover {
+    cursor: pointer;
+}
+
+#uploaded-img-txt-img {
+    border: solid yellow;
+}
+
+#upload-btn {
+    transition: 2s;
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    position: fixed;
+    top: 80px;
+    left: 250px;
+}
+
+#upload-btn:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+#cncl-btn {
+    transition: 2s;
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    position: fixed;
+    top: 70px;
+    left: 350px;
+}
+
+#cncl-btn:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+.alert {
+    background-color: greenyellow;
+    color: black;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.6s;
+}
+
+.closebtn {
+    color: black;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+.msg:hover {
+    background-color: skyblue;
+    color: black;
+    border-radius: 5%;
+    margin-left: 70%;
+    display: inline-table;
+    font-size: x-large;
+    padding: 7px 10px;
+}
+
+#msg-box {
+    width: 77.5%;
+    margin-left: 5%;
+    position: fixed;
+    bottom: 10%;
+    resize: none;
+    border-radius: 40px;
+    padding: 10px;
+}
+
+#no-msg-info {
+    text-align: center;
+    color: red;
+    font-size: 20px;
+}
+
+#helloBtn {
+    color: blue;
+    background-color: chartreuse;
+    font-size: x-large;
+    box-shadow: darkgray;
+}
+
+#send-btn:active {
+    background-color: yellowgreen;
+    border: solid red;
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+}
+
+#send-btn:hover {
+    background-color: rgb(255, 0, 242);
+    border: solid rgb(90, 95, 81);
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+    transform: scale(0.5);
+}
+
+.msg {
+    font-size: 2px;
+    background-color: skyblue;
+    color: black;
+    border-radius: 5%;
+    margin-left: 70%;
+    display: inline-table;
+    font-size: x-large;
+    padding: 7px 10px;
+    transition: 2s;
+}
+
+.msg:hover {
+    transform: scale(1.5);
+    color: red;
+}
+
+::placeholder {
+    color: black;
+    font-weight: 15px;
+}

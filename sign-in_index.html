@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>ProChat</title>
+	<meta charset="utf-8">
+
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+	<script>
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+			apiKey: "AIzaSyDOQv34huHQZ_6dGrRPwkhhgMIjihrXGBc",
+			authDomain: "screen-shot-sharer-2.firebaseapp.com",
+			projectId: "screen-shot-sharer-2",
+			storageBucket: "screen-shot-sharer-2.appspot.com",
+			messagingSenderId: "469362549570",
+			appId: "1:469362549570:web:85f32dd12ba0a4ac6f1edb",
+			measurementId: "G-NDJN7R9TRK"
+		};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+	</script>
+	<script src="p5.js"></script>
+	<script src="p5.play.js"></script>
+	<script src="loading.js"></script>
+</head>
+
+<body>
+	<div id="camera-elts" hidden="true">
+		<div id="my_camera"></div>
+		<input type="button" value="Take Photo and Apply Profile Picture" onClick="takeSnapshot()">
+		<input type="button" value="Cancel" onClick="cancelSnapshot()">
+		<div id="results"></div>
+		<script src="webcamjs/webcam.min.js"></script>
+	</div>
+
+	<link rel="stylesheet" type="text/css" href="sign-in_style.css">
+
+	<div width=" 100%">
+		<table width="100%" height="100%">
+			<tr height="15%">
+				<td colspan="2" style="border: none;">
+					<div width="100%">
+						<marquee id="marquee-txt" style="background-color: cornsilk;">
+							<h1 style="color: blue"> Your Ultimate School Helper!!!</h1>
+						</marquee>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="elts-to-hide-at-events">
+		<p align="center">
+			Let's get started by jumping into your account
+		</p>
+		<button id="login" class="big-btn" onclick="loginUser()">
+			Login
+		</button>
+		<br>
+		<button id="signup" class="big-btn" onclick="signupUser()">
+			Sign Up
+		</button>
+		<br>
+		<div id="uploaded-img-elts" hidden="true">
+			<div id="uploaded-img-txt-img" hidden="true">
+				<img id="uploaded-img" />
+				<p> Your Image </p>
+			</div>
+		</div>
+		<div id="profile-pic-elts" hidden="true">
+			<center>
+				<img src="blank-profile-pic.jpg" id="profile-pic" class="profile-image" alt="Profile Picture">
+				<div id="alert-info" hidden="true"> 
+					<strong>Info!</strong> Please wait until your photo uploads
+				  </div>
+				<div>
+					<button id="capture-photo-btn">
+						<img src="capture.jpg" id="capture-photo" alt="capture" onclick="setCam()" title="Capture"
+							width="100%">
+					</button>
+					<button id="attach-photo-btn" alt="attach" title="Attach">
+						<img src="attachment.png" width="100%" id="imgFileUpload" value="Select File">
+						<form id="file-upload-form">
+							<input type="file" id="file-upload" accept="image/*" style="display: none" />
+						</form>
+					</button>
+					<br><br>
+					<button id="saveBtn">
+						Save
+					</button>
+				</div>
+			</center>
+		</div>
+		<form id="initial-form" hidden="true">
+			<br>
+			<table cellpadding="2" cellspacing="4" align="center">
+				<tr style="display: flex; justify-content: space-evenly;" id="start-form-your-name">
+					<td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+						<label for="inpt-name"> Your name: </label>
+					</td>
+					<td style="border: none;">
+						<input type="text" id="inpt-name" placeholder="Enter your Name here" style="font-size: 25px;">
+					</td>
+				</tr>
+				<tr style="display: flex; justify-content: space-evenly;" id="start-form-your-email">
+					<td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+						<label for="inpt-eml"> Your email: </label>
+					</td>
+					<td style="border: none;">
+						<input type="email" id="inpt-eml" placeholder="Enter your Email here" style="font-size: 25px;">
+					</td>
+				</tr>
+				<tr style="display: flex; justify-content: space-evenly;" id="start-form-your-password">
+					<td nowrap="nowrap" align="left" style="font-size: 25px; border: none;">
+						<label for="inpt-pwd"> Your password: </label>
+					</td>
+					<td style="border: none;">
+						<input type="password" id="inpt-pwd" placeholder="Enter your Password here"
+							style="font-size: 25px;">
+					</td>
+				</tr>
+			</table>
+
+			<div align="center">
+				<input type="submit" id="submit-start-btn" class="big-btn"
+					style="font-size: 12.5px; width: 62.5px; height: 37.5px;">
+				<br>
+				<button id="cancel-sign-log" class="big-btn" onclick="cancelLoginOrSignup()"
+					style="font-size: 12.5px; width: 62.5px; height: 37.5px;">
+					Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+	<div width=" 100%">
+		<table width="100%" height="100%">
+			<tr height="15%">
+				<td colspan="2" style="border: none;">
+					<div width="100%">
+						<marquee id="marquee-txt" style="background-color: cornsilk;">
+							<h1 style="color: green"> - Made by Peeyush, just for you </h1>
+						</marquee>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<script src="sign-in_app.js"></script>
+</body>
