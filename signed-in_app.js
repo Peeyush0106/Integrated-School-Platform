@@ -135,23 +135,23 @@ function addMessage(addedMsg, msgNo) {
             sentBy: auth.currentUser.uid
         }).then(() => {
             refreshMsgSet();
-            window.scrollTo(0, document.documentElement.scrollHeight);
+            // window.scrollTo(0, document.documentElement.scrollHeight);
         });
     });
 
 }
 
 var sentByName;
-var firstLoad = false;
+var firstLoad = true;
 
 function refreshMsgSet() {
     if (auth.currentUser) {
-        database.ref("messages").get().then((data) => {
-            if (JSON.stringify(allMessages) !== JSON.stringify(data.val())) {
-                if (allMessages !== "initialization" && JSON.stringify(allMessages) !== null && data.val() === null) location.reload();
-                allMessages = data.val();
+        database.ref("messages").get().then((allMsgData) => {
+            if (JSON.stringify(allMessages) !== JSON.stringify(allMsgData.val())) {
+                if (allMessages !== "initialization" && JSON.stringify(allMessages) !== null && allMsgData.val() === null) location.reload();
+                allMessages = allMsgData.val();
                 document.getElementById("messages").innerHTML = "";
-                msgData = data.val();
+                msgData = allMsgData.val();
                 for (const j in msgData) {
                     const msg = msgData[j];
                     var message;
@@ -173,6 +173,13 @@ function refreshMsgSet() {
                             message.target = "_blank";
                             document.getElementById("messages").appendChild(message);
                             message.className = "msg";
+
+                            if (firstLoad) {
+                                console.log("scroll", message);
+                                window.scrollTo(0, document.documentElement.scrollHeight);
+                                firstLoad = false;
+                            }
+
                         });
                     }
                     else if (msg.msg) {
@@ -188,15 +195,20 @@ function refreshMsgSet() {
                             document.getElementById("messages").appendChild(message);
                             message.className = "increasing-size-msg";
                             message.className = "msg";
+
+                            if (firstLoad) {
+                                console.log("scroll");
+                                window.scrollTo(0, document.documentElement.scrollHeight);
+                                firstLoad = false;
+                            }
                         });
                     }
+                    if (parseInt(j) === msgData.length) for (var i = 0; i < 10; i++) document.getElementById("messages").appendChild(document.createElement("br"));
                 }
-                if (data.exists()) for (var i = 0; i < 10; i++) document.getElementById("messages").appendChild(document.createElement("br"));
             }
-            if (!data.exists()) {
+            if (!allMsgData.exists()) {
                 setInterval(showHelloGif, 1000);
             }
-            if (!firstLoad) window.scrollTo(0, document.documentElement.scrollHeight);
         });
     }
 }

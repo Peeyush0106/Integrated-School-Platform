@@ -113,16 +113,6 @@ button:hover, input:hover, img:hover {
     color: black;
 }
 
-.msg:hover {
-    background-color: skyblue;
-    color: black;
-    border-radius: 5%;
-    margin-left: 70%;
-    display: inline-table;
-    font-size: x-large;
-    padding: 7px 10px;
-}
-
 #msg-box {
     width: 77.5%;
     margin-left: 5%;
@@ -176,7 +166,7 @@ button:hover, input:hover, img:hover {
 }
 
 .msg:hover {
-    transform: scale(1.5);
+    transform: scale(1.12);
     color: red;
 }
 
