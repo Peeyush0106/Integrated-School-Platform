@@ -17,6 +17,9 @@ var fileAboutToUploadState = false;
 var allMessages = "initialization";
 var directHelloShow = true;
 var initMsgAnimShown = false;
+var uploadingFile = false;
+var firstMsgPlot = true;
+var wait = false;
 
 cancelledUpload = false;
 
@@ -61,7 +64,6 @@ function getNoOfMessages(functionToCall) {
 
 function uploadMessage(msgNo) {
     console.log(msgNo);
-    var myName;
     database.ref(auth.currentUser.uid).get().then((data) => {
         myName = data.val();
     });
@@ -69,7 +71,7 @@ function uploadMessage(msgNo) {
         database.ref("messages/" + msgNo).update({
             fileURL: url,
             fileName: fileUpload.files[0].name,
-            sentBy: auth.currentUser.uid
+            sentById: auth.currentUser.uid
         }).then(() => {
             loading_show = false;
             var succesDiv = document.createElement("div");
@@ -80,6 +82,7 @@ function uploadMessage(msgNo) {
                 </div>
             `;
             document.body.appendChild(succesDiv);
+            window.scrollTo(0, document.documentElement.scrollHeight);
         });
     });
 }
@@ -123,7 +126,6 @@ auth.onAuthStateChanged(() => {
 });
 
 function addMessage(addedMsg, msgNo) {
-    console.log("updateChat");
     msgInQueue.push(addedMsg);
     document.getElementById("msg-box").value = "";
     var myName;
@@ -132,17 +134,21 @@ function addMessage(addedMsg, msgNo) {
         console.log(myName);
         database.ref("messages/" + msgNo).update({
             msg: addedMsg,
-            sentBy: auth.currentUser.uid
+            sentById: auth.currentUser.uid
         }).then(() => {
             refreshMsgSet();
-            // window.scrollTo(0, document.documentElement.scrollHeight);
         });
     });
-
 }
 
-var sentByName;
-var firstLoad = true;
+function getUserProfile(id, functionToCall) {
+    database.ref("Users/" + id).get().then((data) => {
+        if (functionToCall) functionToCall(data.val().name, data.val().profilePicURL);
+    });
+}
+
+var noOfPlots = 0;
+var firstPlotMsg = 0;
 
 function refreshMsgSet() {
     if (auth.currentUser) {
@@ -153,58 +159,83 @@ function refreshMsgSet() {
                 document.getElementById("messages").innerHTML = "";
                 msgData = allMsgData.val();
                 for (const j in msgData) {
+                    noOfPlots++;
                     const msg = msgData[j];
                     var message;
-                    if (msg.fileURL && msg.fileName) {
-                        console.log(msg.sentBy);
-                        var msgSenderId = msg.sentBy;
-                        console.log(msgSenderId);
-                        database.ref("Users/" + msgSenderId + "/name").get().then((data) => {
-                            var userName = data.val();
-                            console.log(userName);
-                            if (userName.length > 15) sentByName = userName.slice(0, 15) + " ...";
-                            else sentByName = userName;
+                    getUserProfile(msg.sentById, function (msgSenderName, msgSenderPic) {
+                        var msgSenderId = msg.sentById;
+                        if (msgSenderName.length > 15) msgSenderName = msgSenderName.slice(0, 15) + " ...";
 
-                            message = document.createElement("a");
-                            message.href = msg.fileURL;
-                            if (msg.fileName.length > 15) fileName = msg.fileName.slice(0, 15) + " ...";
+                        if (msg.fileURL && msg.fileName) {
+                            var fileName, fileURL;
+                            if (msg.fileName.length > 15) {
+                                fileName = msg.fileName.slice(0, 15) + " ...";
+                            }
                             else fileName = msg.fileName;
-                            message.innerHTML = sentByName + "<br> Open file: " + fileName;
-                            message.target = "_blank";
-                            document.getElementById("messages").appendChild(message);
+                            if (msg.fileURL.length > 15) {
+                                fileURL = msg.fileURL.slice(0, 15) + " ...";
+                            }
+                            else fileName = msg.fileURL;
+
+                            message = document.createElement("div");
+                            a = document.createElement("a");
+                            img = document.createElement("img");
+
+                            img.src = msgSenderPic;
+                            img.className = "profileImgMsg";
+                            img.width = 50;
+
+                            a.href = msg.fileURL;
+                            a.innerHTML = "<br> Open file: " + fileName;
+                            a.target = "_blank";
+
+                            message.appendChild(img);
+                            message.innerHTML += `<br> <span style="font-size: 50%">` + msgSenderName + `</span>`;
                             message.className = "msg";
 
-                            if (firstLoad) {
-                                console.log("scroll", message);
-                                window.scrollTo(0, document.documentElement.scrollHeight);
-                                firstLoad = false;
-                            }
-
-                        });
-                    }
-                    else if (msg.msg) {
-                        var msgSenderId = msg.sentBy;
-                        console.log(msgSenderId);
-                        database.ref("Users/" + msgSenderId + "/name").get().then((data) => {
-                            var userName = data.val();
-                            console.log(userName);
-                            if (userName.length > 15) sentByName = userName.slice(0, 15) + " ...";
-                            else sentByName = userName;
-                            message = document.createElement("p");
-                            message.innerHTML = `<div style="font-size: 50%">` + sentByName + ` </div> ` + msg.msg;
+                            message.appendChild(a);
                             document.getElementById("messages").appendChild(message);
-                            message.className = "increasing-size-msg";
+                            document.getElementById("messages").appendChild(document.createElement("br"));
+                            document.getElementById("messages").appendChild(document.createElement("br"));
+
+                            message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
+                            // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
+                        }
+                        else if (msg.msg) {
+                            var msgTxt = msg.msg;
+
+                            message = document.createElement("div");
+                            p = document.createElement("p");
+                            img = document.createElement("img");
+
+                            img.src = msgSenderPic;
+                            img.className = "profileImgMsg";
+                            img.width = 35;
+
+                            p.innerHTML = msgTxt;
+
+                            message.appendChild(img);
+                            message.innerHTML += `<div style="font-size: 50%">` + msgSenderName + `</div>`;
                             message.className = "msg";
 
-                            if (firstLoad) {
-                                console.log("scroll");
+                            message.appendChild(p);
+                            document.getElementById("messages").appendChild(message);
+                            document.getElementById("messages").appendChild(document.createElement("br"));
+                            document.getElementById("messages").appendChild(document.createElement("br"));
+
+                            message.style.backgroundColor = msgSenderId === auth.currentUser.uid ? "wheat" : "skyblue";
+                            // message.style.marginLeft = msgSenderId === auth.currentUser.uid ? "50%" : "25%";
+                        }
+                        if (parseInt(j) === msgData.length) for (var i = 0; i < 10; i++) document.getElementById("messages").appendChild(document.createElement("br"));
+                        if (firstMsgPlot) {
+                            for (var i = 0; i < noOfPlots; i++) {
+                                firstPlotMsg += 1;
                                 window.scrollTo(0, document.documentElement.scrollHeight);
-                                firstLoad = false;
                             }
-                        });
-                    }
-                    if (parseInt(j) === msgData.length) for (var i = 0; i < 10; i++) document.getElementById("messages").appendChild(document.createElement("br"));
+                        }
+                    });
                 }
+                if (firstPlotMsg === noOfPlots) firstMsgPlot = false;
             }
             if (!allMsgData.exists()) {
                 setInterval(showHelloGif, 1000);
@@ -263,6 +294,28 @@ function checkConnection() {
         connectedRef.on("value", function (snap) {
             connected = snap.val();
             if (connected) {
+                database.ref("Users/" + auth.currentUser.uid + "/joined").get().then((data) => {
+                    if (data.exists() && data.val()) {
+                        console.log("continue");
+                    }
+                    else {
+                        document.getElementById("pin-form").hidden = false;
+                        document.getElementById("submit-pin").onclick = function () {
+                            if (document.getElementById("pin-inpt").value.toLowerCase() === "debug") {
+                                database.ref("Users/" + auth.currentUser.uid).update({
+                                    joined: true
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                alert("Incorrect pin!");
+                            }
+                        }
+                        document.getElementById("messages").hidden = true;
+                        document.getElementById("messages").innerHTML = "";
+                    }
+                });
                 noConnectionTimer = 0;
                 if (!fileAboutToUploadState) {
                     uploadLocallyBtn.hidden = false;
@@ -330,6 +383,7 @@ function sendMessage(event, directThrow) {
             });
             if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").innerHTML = "";
         }
+        window.scrollTo(0, document.documentElement.scrollHeight);
     }
     else {
         // show alert
@@ -353,7 +407,7 @@ window.onload = function () {
             border-style: dashed;
             border-width: 5px;
             position: fixed;
-            margin-left: 84%;
+            margin-left: 90%;
             bottom: 9%;
         }
         #logout-btn {

@@ -73,7 +73,10 @@ document.getElementById("initial-form").addEventListener("submit", (e) => {
                                 location.href = "signed-in_index.html";
                             });
                         });
-                    });
+                    }).catch(function (error) {
+                        message = error.message;
+                        alert(message);
+                    });;
                 }
                 if (login) {
                     auth.signInWithEmailAndPassword(email, pwd).then(() => {
@@ -81,7 +84,7 @@ document.getElementById("initial-form").addEventListener("submit", (e) => {
                         console.log("Success!");
                     }).catch(function (error) {
                         message = error.message;
-                        if (message === "There is no user record corresponding to this identifier. The user may have been deleted.") message = "Account does not exist. You can sign up instead."
+                        if (message === "There is no user record corresponding to this identifier. The user may have been deleted.") message = "Account does not exist. Sign up instead."
                         alert(message);
                     });
                 }

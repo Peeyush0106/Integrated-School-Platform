@@ -44,8 +44,8 @@ canvas {
 
 .attach {
     position: fixed;
-    top: 80px;
-    margin-left: 30%;
+    margin-left: 84%;
+    bottom: 9%;
 }
 
 #open-chat {
@@ -155,22 +155,44 @@ button:hover, input:hover, img:hover {
 
 .msg {
     font-size: 2px;
-    background-color: skyblue;
     color: black;
     border-radius: 5%;
-    margin-left: 70%;
     display: inline-table;
     font-size: x-large;
     padding: 7px 10px;
     transition: 2s;
+    margin-right: 10%;
+    margin-left: 35%;
 }
 
 .msg:hover {
-    transform: scale(1.12);
+    transform: scale(1.02);
     color: red;
 }
 
 ::placeholder {
     color: black;
     font-weight: 15px;
+}
+
+.profileImgMsg {
+    width: 50;
+    border-radius: 50%;
+    border: solid 1px;
+}
+
+#imgFileUpload {
+    transition: 1.2s;
+    background-color: yellow;
+    border: solid blue;
+    border-radius: 50%;
+    border-style: dashed;
+    border-width: 5px;
+    position: fixed;
+}
+
+#pin-form {
+    zoom: 4;
+    margin-top: 10%;
+    text-align: center;
 }
