@@ -117,9 +117,7 @@ auth.onAuthStateChanged(() => {
                 document.getElementById("msg-box").style.display = "none";
                 document.getElementById("send-btn").style.display = "none";
                 loading_show = true;
-                setTimeout(() => {
-                    location.href = "redirector_index.html";
-                }, 2000);
+                location.href = "redirector_index.html";
             }
         }, 3000);
     }
