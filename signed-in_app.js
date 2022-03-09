@@ -314,6 +314,10 @@ function checkConnection() {
                         }
                         document.getElementById("messages").hidden = true;
                         document.getElementById("messages").innerHTML = "";
+                        document.getElementById("msg-box").hidden = true;
+                        document.getElementById("send-btn").hidden = true;
+                        if (document.getElementById("no-msg-info")) document.getElementById("no-msg-info").hidden = true;
+                        document.getElementById("imgFileUpload").style.display = "none";
                     }
                 });
                 noConnectionTimer = 0;
